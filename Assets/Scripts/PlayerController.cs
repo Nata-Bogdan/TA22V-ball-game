@@ -1,29 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine UI;
+using UnityEngine.UI;
+using TMPro;
+using System;
 
-public class PlayerController : MonoBehaviour
+public class playerController : MonoBehaviour
 {
     public float Speed;
-    public Text ScoreText;
-    public Text WinText;
+    public TMP_Text ScoreText;
+    public TMP_Text WinText;
     public GameObject Gate;
-    public Rigidbody rb;
+    private Rigidbody rb;
     public int Score;
 
-    void SetScoreText() 
+    void SetScoreText()
     {
-        ScoreText.text = "Score: " + Score.ToSpring();
-        if (Score >= 5) {
-            WinText.text = "You Won! Press R to restart or ESC to quit"
+        ScoreText.text = "Score: " + Score.ToString();
+        if (Score >= 5)
+        {
+            WinText.text = "You won! Press R to restart or ESC to quit";
         }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent <RigidBody>()
+        rb = GetComponent<Rigidbody>();
         Score = 0;
         SetScoreText();
         WinText.text = "";
@@ -35,11 +38,35 @@ public class PlayerController : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 movement = new.Vector3(moveHorizontal, 0.0f, moveVertical);
+        Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 
         rb.AddForce(movement * Speed);
-        
+
         //restart
-        if (Input.GetKeyDown()
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
+        //Quit
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            other.gameObject.SetActive(false);
+            Score += 1;
+            SetScoreText();
+        }
+
+        if (other.gameObject.CompareTag("Danger"))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
     }
 }
