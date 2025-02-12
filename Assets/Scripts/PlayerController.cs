@@ -17,7 +17,7 @@ public class playerController : MonoBehaviour
     void SetScoreText()
     {
         ScoreText.text = "Score: " + Score.ToString();
-        if (Score >= 5)
+        if (Score >= 9)
         {
             WinText.text = "You won! Press R to restart or ESC to quit";
         }
@@ -57,14 +57,18 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("PickUp"))
+        if (other.gameObject.CompareTag("pick_up"))
         {
             other.gameObject.SetActive(false);
             Score += 1;
+            if (Score >= 5)
+            {
+                Gate.gameObject.SetActive(false);
+            }
             SetScoreText();
         }
 
-        if (other.gameObject.CompareTag("Danger"))
+        if (other.gameObject.CompareTag("danger"))
         {
             Application.LoadLevel(Application.loadedLevel);
         }
