@@ -6,6 +6,7 @@ TagManager:
   tags:
   - pick_up
   - danger
+  - audio
   layers:
   - Default
   - TransparentFX

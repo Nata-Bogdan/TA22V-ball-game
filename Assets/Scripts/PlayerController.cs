@@ -14,10 +14,12 @@ public class playerController : MonoBehaviour
     private Rigidbody rb;
     public int Score;
 
+    AudioManager audioManager;
+
     void SetScoreText()
     {
         ScoreText.text = "Score: " + Score.ToString();
-        if (Score >= 9)
+        if (Score >= 4)
         {
             WinText.text = "You won! Press R to restart or ESC to quit";
         }
@@ -59,6 +61,7 @@ public class playerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("pick_up"))
         {
+            audioManager = GameObject.FindGameObjectWithTag("audio").GetComponent<AudioManager>();
             other.gameObject.SetActive(false);
             Score += 1;
             if (Score >= 5)
@@ -66,6 +69,7 @@ public class playerController : MonoBehaviour
                 Gate.gameObject.SetActive(false);
             }
             SetScoreText();
+            audioManager.PlaySFX(audioManager.pickUp);
         }
 
         if (other.gameObject.CompareTag("danger"))
